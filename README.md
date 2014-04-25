@@ -10,17 +10,9 @@ Tool to plot data from ros. Derived from the rqt_plot.
 
 
 ##instalation
+to install the gui you have to clear your rqt cache
 ```
-./scripts/install.sh
+rm ~/.config/ros.org/rqt_gui.ini
 ```
 
-##usage
-```
-rosplot /nanoquad/state/position/x /nanoquad/state/position/y
-```
-or
-``` 
-rosplot /nanoquad/state/position/x:y:z
-```
-note that the topics can be autocompleted.
 
