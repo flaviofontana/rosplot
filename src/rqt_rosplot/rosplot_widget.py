@@ -77,15 +77,12 @@ class RosplotWidget(QWidget):
         self.subscribe_topic_button.setEnabled(is_num or all_children_num)
 
     @pyqtSlot()
+    def on_topic_edit_returnPressed(self):
+        self.attempt_to_add_topics()
+
+    @pyqtSlot()
     def on_subscribe_topic_button_clicked(self):
-        slot_name = str(self.topic_edit.text())
-        if self.ros_topic_tree.isNummeric(slot_name):
-            self.add_topic(slot_name)
-        if self.ros_topic_tree.allChildrenNummeric(slot_name):
-            if not slot_name[-1] == '/':
-                slot_name += '/'
-            for slot in self.ros_topic_tree.pathFromAllChildren(slot_name):
-               self.add_topic(slot)
+        self.attempt_to_add_topics()
 
     @pyqtSlot()
     def on_clear_button_clicked(self):
@@ -124,6 +121,16 @@ class RosplotWidget(QWidget):
             action.triggered.connect(make_remove_topic_function(topic_name))
             self._remove_topic_menu.addAction(action)
         self.remove_topic_button.setMenu(self._remove_topic_menu)
+        
+    def attempt_to_add_topics(self):
+        slot_name = str(self.topic_edit.text())
+        if self.ros_topic_tree.isNummeric(slot_name):
+            self.add_topic(slot_name)
+        if self.ros_topic_tree.allChildrenNummeric(slot_name):
+            if not slot_name[-1] == '/':
+                slot_name += '/'
+            for slot in self.ros_topic_tree.pathFromAllChildren(slot_name):
+               self.add_topic(slot)
 
     def add_topic(self, topic_name):
         if topic_name in self._rosdata:
