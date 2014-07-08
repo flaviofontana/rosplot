@@ -20,4 +20,5 @@ class Rosplot(Plugin):
         self._widget.setWindowTitle('Rosplot')
 
     context.add_widget(self._widget)
+    self._widget.topic_edit.setFocus()
 
