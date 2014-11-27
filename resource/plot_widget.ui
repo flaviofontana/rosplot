@@ -30,7 +30,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="topic_edit">
+      <widget class="MyLineEditWithTabPressedEvent" name="topic_edit">
        <property name="text">
         <string>/</string>
        </property>
@@ -114,6 +114,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyLineEditWithTabPressedEvent</class>
+   <extends>QLineEdit</extends>
+   <header>rqt_rosplot/my_line_edit_with_tab_pressed_event</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

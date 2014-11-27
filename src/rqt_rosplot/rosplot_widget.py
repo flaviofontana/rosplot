@@ -16,8 +16,10 @@ from PyQt4.uic import loadUi
 #internal 
 from plot_helper import * # check what this is for
 from graph_widget import GraphWidget
+from my_line_edit_with_tab_pressed_event import MyLineEditWithTabPressedEvent
 from topic_completer import TopicCompleter
 from ros_topic_tree import RosTopicTree
+from string_intersect import *
 
 class RosplotWidget(QWidget):
     _redraw_interval = 40
@@ -41,6 +43,7 @@ class RosplotWidget(QWidget):
         self._topic_completer = TopicCompleter(self)
         self._topic_completer.setModel(self.ros_topic_tree)     
         self.topic_edit.setCompleter(self._topic_completer)
+        self.connect(self.topic_edit, SIGNAL("tabPressed"), self.on_topic_edit_tabPressed)
         
         # the rosstuff
         self._start_time = rospy.get_time()
@@ -76,6 +79,21 @@ class RosplotWidget(QWidget):
         all_children_num = self.ros_topic_tree.allChildrenNummeric(slot_name)     
         self.subscribe_topic_button.setEnabled(is_num or all_children_num)
 
+    # Perform autocompletion when tab is pressed topic_edit text box
+    def on_topic_edit_tabPressed(self):
+        if self._topic_completer.completionCount() == 1: # If there is a single autocompletion, use that
+            updated_text = self._topic_completer.currentCompletion()
+            self.topic_edit.setText(updated_text)
+            self.topic_edit.insert("/")
+        elif self._topic_completer.completionCount() > 1: # If there is more than one autocompletion, complete upto the last common letter
+            match = str(self._topic_completer.currentCompletion())
+            for i in range(1, self._topic_completer.completionCount()):
+                self._topic_completer.setCurrentRow(i)
+                word = str(self._topic_completer.currentCompletion())
+                match = string_intersect(word, match)
+            self._topic_completer.setCurrentRow(0) # Set the current row back to zero in case tab is pressed again
+            self.topic_edit.setText(match)
+            
     @pyqtSlot()
     def on_topic_edit_returnPressed(self):
         self.attempt_to_add_topics()
