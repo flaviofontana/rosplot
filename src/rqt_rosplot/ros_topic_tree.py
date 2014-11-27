@@ -112,8 +112,10 @@ class RosTopicTree(TreeModel):
         self.list = []    
         for topic_name, topic_type in rospy.get_published_topics():      
             message_class = roslib.message.get_message_class(topic_type)
-            message_obj = message_class()
-            self._inception(topic_name, message_obj, topic_type)
+            print message_class
+            if(message_class!=None):
+              message_obj = message_class()
+              self._inception(topic_name, message_obj, topic_type)
             
     def _slot_has_children(self, slot_class):
         return hasattr(slot_class, '__slots__') and hasattr(slot_class, '_slot_types')

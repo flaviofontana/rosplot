@@ -10,7 +10,6 @@ from PyQt4.QtGui import *
 import PyQt4.Qwt5 as Qwt
 
 from numpy import arange, zeros, concatenate 
-from scipy.constants.codata import precision
 
 
 # create real QwtDataPlot class
